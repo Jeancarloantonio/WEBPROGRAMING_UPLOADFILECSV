@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title style="font-family: 'Times New Roman', Times, serif;">CSV</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style type="text/css">
+  .dropdownfiles {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  #drop_zone {
+    border: 2px dashed #bbb;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    color: #bbb;
+  }
+
+</style>
+<body>
+  <header>
+    <div class="alert alert-info">
+    <h3 class="text-center">Validar la extensión de archivos (JS)</h3>
+    </div>
+  </header>
+
+  <div id="main">
+    <p >Cargar archivo:
+      <input type="file" id="files" name="files[]" accept=".csv" multiple onchange="return validarExt()"/>
+      <div id="visorArchivo">
+      <!-- aqui se despliega el preview-->
+      </div>
+    </p>
+
+    <script>
+      function handleFileSelect(evt) {
+        var files = evt.target.files; // FileList object
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+
+          output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                      f.size, ' bytes, last modified: ',
+                      f.lastModifiedDate.toLocaleDateString(), '</li>');
+        }
+        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+      }
+
+      document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    </script>
+
+  </div>
+
+  <br>
+
+  <div id="drop_zone" class="dropdownfiles">Arrastra el archivo aquí</div>
+  <output id="list"></output>
+
+  
+  
+  <script>
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+  
+      var files = evt.dataTransfer.files; 
+      var output = [];
+      for (var i = 0, f; f = files[i]; i++) {
+        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+      }
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+  
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; 
+    }
+    
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+  </script>
+
+  </body>
+</html>
+
+<script type="text/javascript">
+        
+  function validarExt()
+  {
+      var archivoInput = document.getElementById('archivoInput');
+      var archivoRuta = archivoInput.value;
+      var extPermitidas = /(.pdf|.csv|.png|.jpg)$/i;
+      
+      if(!extPermitidas.exec(archivoRuta))
+      {
+          alert('Tipo de archivo no permitido');
+          archivoInput.value='';
+          return false;
+      }
+
+      else
+      {
+          if(archivoInput.files && archivoInput.files[0])
+          {
+              alert('Archivo Cargado, Espere');
+              var visor = new FileReader();
+              visor.onload=function(e)
+              {
+                  document.getElementById('visorArchivo').innerHTML=
+                  '<embed src="'+e.target.result+'" width="500" heigth="500" >';                    }
+              };
+              visor.readAsDataURL(archivoInput.files[0]);
+          }
+      } 
+  }
+
+</script>
