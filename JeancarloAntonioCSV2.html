@@ -1,0 +1,174 @@
+<!--
+    Instrucciones
+Se pide desarrollar una aplicacion web en el cual el usuario podra subir un archivo separado por 
+comas (CSV), el cual contiene una cabezera, es decir en la primera linea se tiene el nombre de los 
+campos, apartir de la segunda linea hasta el final se tienen los datos. 
+
+Supuestos:
+1. El archivo que el usuario subira puede ser de dos formas teniendo un boton de abrir archivo o 
+arrastrando el archivo a la pagina web. Las dos opciones deben ser funcionales para el usuario 
+final. 
+2. La aplicacion debera informar si el archivo es valido o no lo es. Como por ejemplo que no sea 
+un archivo tipo CSV, dejo a su consideracion el pensar que mas errores podra reportar al 
+usuario final.
+3. Visualizar el contenido del archivo en el nevegador si es que este cumple con los criterios de 
+ valides establecidos por el diseñador (en este caso el alumnos). Recordar usar etiquetas 
+ html5, CSS (tomar en cuenta los 3 niveles de CSS). Es decir cargar archivo y visualizarlo con un 
+ diseño y programacion web propuesto por usted.
+4. Toda vez que el archivo se puede navegar en el browser, permir que el usuario selecciones 
+minimo dos columnas, enviando el respectivo mensaje de que una columna se ha 
+seleccionado, manejar dos tipos de mensajes uno para programador y otro para usuario final.
+5. Realizar un reporte de la actividad, donde se informe lo pasos a seguir para usar su aplicacion, 
+asi como todos los supuesto que usted considero para el desarrollo de la actividad.
+6. Todo las evidencias deberan estar alojadas en sus repositorios GIT.
+7. Enviar link de su repositorio a: imay@itchetumal.edu.mx
+8. Se considerara la hora de entrega teniendo como limite a las 18:00 horas del dia 29 de Junio 
+de 2020.
+
+NOTA: Recuerde los detalles no visuales tambien cuentan.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title style="font-family: 'Times New Roman', Times, serif;">CSV</title>
+  <meta name="description" content="Final Proyect">
+  <meta name="author" content="Jeancarlo Antonio Aranda Cen">
+  <meta name="date" content="Jueves, 03/07/2020">
+  <meta name="keys" content="CSV">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> <script src="papaparse.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="csv.css">
+</head>
+<body>
+  <header>
+    <div class="alert alert-info">
+    <h3 class="text-center">Creación de tabla mediante un archivo ".CSV" (JS)</h3>
+    </div>
+  </header>
+  <section class="text-center">
+    <div class="container" style="padding:10px 10px;">
+      <div class="well">
+        <form class="formulario">
+          <p>
+            <label for="files" class="text-center">Seleccione un archivo csv:</label>
+            <input type="file" id="files" accept=".csv" required/>
+            </p>
+            <script>
+              function handleFileSelect(evt) {
+      
+                var files = evt.target.files; // FileList object
+      
+                // files is a FileList of File objects. List some properties.
+                var output = [];
+                for (var i = 0, f; f = files[i]; i++) {
+      
+                  output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                              f.size, ' bytes, last modified: ',
+                              f.lastModifiedDate.toLocaleDateString(), '</li>');
+                }
+                document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+              }
+      
+              document.getElementById('archivoInput').addEventListener('change', handleFileSelect, false);
+            </script>
+          <br>
+
+          <div id="drop_zone" class="dropdownfiles">Arrastra el archivo aquí</div>
+          <script>
+            function handleFileSelect(evt) {
+              evt.stopPropagation();
+              evt.preventDefault();
+          
+              var files = evt.dataTransfer.files; // FileList object
+        
+              var output = [];
+              for (var i = 0, f; f = files[i]; i++) {
+        
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                            f.size, ' bytes, last modified: ',
+                            f.lastModifiedDate.toLocaleDateString(), '</li>');
+              }
+              document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+            }
+            
+            function handleDragOver(evt) {
+              evt.stopPropagation();
+              evt.preventDefault();
+              evt.dataTransfer.dropEffect = 'copy'; 
+            }
+            
+            var dropZone = document.getElementById('drop_zone');
+            dropZone.addEventListener('dragover', handleDragOver, true);
+            dropZone.addEventListener('drop', handleFileSelect, false);
+          </script>
+          <br>
+          
+          <button type="submit" id="submit-file" class="btn btn-primary " >Cargar Archivo</button>
+          
+        </form>
+        <output id="list"></output>
+        <br>
+
+        <div class="row" id="parsed_csv_list">
+</section>
+        </div>
+      </div>
+    </div>
+  
+  <br>
+  
+  <script>
+    //Función para cargar archivo csv
+
+    $(document).ready(function(){
+      $('#header').load('../header-ads.html');
+        $('#footer').load('../footer-ads.html');
+      
+        $('#submit-file').on("click",function(e){
+        e.preventDefault();
+        $('#files').parse({
+          config: {
+            delimiter: "auto",
+            complete: displayHTMLTable,
+          },
+          before: function(file, inputElem)
+          {
+            //console.log("Parsing file...", file);
+          },
+          error: function(err, file)
+          {
+            //console.log("ERROR:", err, file);
+          },
+          complete: function()
+          {
+            //console.log("Done with all files");
+          }
+        });
+        });
+      
+      function displayHTMLTable(results){
+        var table = "<table class='table'>";
+        var data = results.data;
+         
+        for(i=0;i<data.length;i++){
+          table+= "<tr>";
+          var row = data[i];
+          var cells = row.join(",").split(",");
+           
+          for(j=0;j<cells.length;j++){
+            table+= "<td>";
+            table+= cells[j];
+            table+= "</th>";
+          }
+          table+= "</tr>";
+        }
+        table+= "</table>";
+        $("#parsed_csv_list").html(table);
+      }
+      });
+
+  </script>
+
+  </body>
+</html>

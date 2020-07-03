@@ -1,0 +1,70 @@
+.dropdownfiles {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  #drop_zone {
+    border: 2px dashed #bbb;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    color: #bbb;
+  }
+
+  .row {
+      margin-right: -15px;
+      margin-left: -15px;
+  }
+
+  .table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+  }
+
+  table {
+      background-color: transparent;
+  }
+
+  table {
+      border-spacing: 0;
+      border-collapse: collapse;
+  }
+
+  tbody {
+      display: table-row-group;
+      vertical-align: middle;
+      border-color: inherit;
+  }
+
+  table {
+      display: table;
+      border-collapse: separate;
+      box-sizing: border-box;
+      border-spacing: 2px;
+      border-color: grey;
+  }
+
+  tbody {
+      display: table-row-group;
+      vertical-align: middle;
+      border-color: inherit;
+  }
+
+  tr {
+      display: table-row;
+      vertical-align: inherit;
+      border-color: inherit;
+  }
+
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+      padding: 8px;
+      line-height: 1.42857143;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+  }
+
+  td {
+      display: table-cell;
+      vertical-align: inherit;
+  }
